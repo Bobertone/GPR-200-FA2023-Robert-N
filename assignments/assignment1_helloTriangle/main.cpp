@@ -44,6 +44,7 @@ const char* fragmentShaderSource = R"(
 	}
 )";
 
+//Creates a new vertex array object with vertex data
 unsigned int createVAO(float* vertexData, int numVertices) 
 {
 	//Define a new buffer id
@@ -59,7 +60,7 @@ unsigned int createVAO(float* vertexData, int numVertices)
 	//Tell vao to pull vertex data from vbo
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-	//Position attribute
+	//Position attribute (7 floats?)
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 7, (const void*)0);
 	glEnableVertexAttribArray(0);
 
@@ -143,15 +144,15 @@ int main() {
 	}
 
 	unsigned int shader = createShaderProgram(vertexShaderSource, fragmentShaderSource);
-	unsigned int vao = createVAO(vertices, 3);
-
+	unsigned int vao = createVAO(vertices, sizeof(vertices));
+	
 	while (!glfwWindowShouldClose(window)) {
 		glfwPollEvents();
 		glClearColor(0.3f, 0.4f, 0.9f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		glUseProgram(shader);
 		glBindVertexArray(vao);
-
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 		//Time stuff
 		glfwSwapBuffers(window);
 
@@ -162,7 +163,7 @@ int main() {
 		//Set the value of the variable at the location
 		glUniform1f(timeLocation, time);
 
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		
 	}
 
 	//VBO & VAO code (moved)
@@ -174,11 +175,5 @@ int main() {
 	//Shader attachments + linking code (moved)
 	createShaderProgram(vertexShaderSource, fragmentShaderSource);
 
-	while (!glfwWindowShouldClose(window)) {
-		glfwPollEvents();
-		glClearColor(0.3f, 0.4f, 0.9f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
-		glfwSwapBuffers(window);
-	}
 	printf("Shutting down...");
 }
