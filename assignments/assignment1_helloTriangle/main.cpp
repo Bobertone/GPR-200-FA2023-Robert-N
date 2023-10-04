@@ -151,11 +151,7 @@ int main() {
 		glClearColor(0.3f, 0.4f, 0.9f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		glUseProgram(shader);
-		glBindVertexArray(vao);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
-		//Time stuff
-		glfwSwapBuffers(window);
-
+		
 		//The current time in seconds this frame
 		float time = (float)glfwGetTime();
 		//Get the location of the uniform by name
@@ -163,17 +159,23 @@ int main() {
 		//Set the value of the variable at the location
 		glUniform1f(timeLocation, time);
 
+		glBindVertexArray(vao);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+		//Time stuff
+		glfwSwapBuffers(window);
+
+		
 		
 	}
 
 	//VBO & VAO code (moved)
-	createVAO(vertices, sizeof(vertices));
+	//createVAO(vertices, sizeof(vertices));
 
 	//Compiling shader code (moved)
-	createShader(GL_VERTEX_SHADER, vertexShaderSource);
+	//createShader(GL_VERTEX_SHADER, vertexShaderSource);
 
 	//Shader attachments + linking code (moved)
-	createShaderProgram(vertexShaderSource, fragmentShaderSource);
+	//createShaderProgram(vertexShaderSource, fragmentShaderSource);
 
 	printf("Shutting down...");
 }
