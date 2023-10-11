@@ -2,6 +2,7 @@
 #include <math.h>
 
 #include <ew/external/glad.h>
+#include <bob/texture.h>
 #include <ew/ewMath/ewMath.h>
 #include <GLFW/glfw3.h>
 #include <imgui.h>
@@ -59,19 +60,53 @@ int main() {
 	ImGui_ImplOpenGL3_Init();
 
 	ew::Shader shader("assets/vertexShader.vert", "assets/fragmentShader.frag");
+	ew::Shader flowerShader("assets/vertexShaderFlower.vert", "assets/fragmentShaderFlower.frag");
 
 	unsigned int quadVAO = createVAO(vertices, 4, indices, 6);
 
 	glBindVertexArray(quadVAO);
 
+	//Example usage in main.cpp
+	unsigned int bgTexture = loadTexture("assets/background.png", GL_REPEAT, GL_NEAREST);
+	unsigned int noiseTexture = loadTexture("assets/noise.png", GL_REPEAT, GL_NEAREST);
+	unsigned int flowerTexture = loadTexture("assets/flower.png", GL_CLAMP_TO_EDGE, GL_NEAREST);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	//Must be using this shader when setting uniforms
+	shader.use();
+	//Place textureA in unit 0
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, bgTexture);
+	//Place textureB in unit 1
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, noiseTexture);
+	//Make sampler2D _bgTexture sample from unit 0
+	shader.setInt("_bgTexture", 0);
+	//Make sampler2D _noiseTexture sample from unit 1
+	shader.setInt("_noiseTexture", 1);
+
+	//flower code
+	flowerShader.use();
+	//Bind to texture unit 2
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, flowerTexture);
+	//Make sampler2D _flowerTexture sample from unit 2
+	flowerShader.setInt("_flowerTexture", 2);
+
 	while (!glfwWindowShouldClose(window)) {
 		glfwPollEvents();
 		glClearColor(0.3f, 0.4f, 0.9f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-
 		//Set uniforms
 		shader.use();
-
+		float time = (float)glfwGetTime();
+		shader.setFloat("iTime", time);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, NULL);
+		
+		flowerShader.use();
+		flowerShader.setFloat("iTime", time);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, NULL);
 
 		//Render UI
