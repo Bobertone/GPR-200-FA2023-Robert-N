@@ -1,7 +1,7 @@
 #pragma once
 #include "../ew/ewMath/mat4.h"
 #include "../ew/ewMath/vec3.h"
-
+#include "../ew/ewMath/ewMath.h"
 namespace bob {
 	//Identity matrix
 	inline ew::Mat4 Identity() {
@@ -60,9 +60,14 @@ namespace bob {
 	struct Transform {
 		ew::Vec3 position = ew::Vec3(0.0f, 0.0f, 0.0f);
 		ew::Vec3 rotation = ew::Vec3(0.0f, 0.0f, 0.0f); //Euler angles (degrees)
-		ew::Vec3 scale    = ew::Vec3(1.0f, 1.0f, 1.0f);
+		ew::Vec3 scale = ew::Vec3(1.0f, 1.0f, 1.0f);
 		ew::Mat4 getModelMatrix() const {
-			return Translate(position) * RotateY(rotation.y) * RotateX(rotation.x) * RotateZ(rotation.z) * Scale(scale);
+			return 
+				Translate(position) *
+				RotateY(ew::Radians(rotation.y)) *
+				RotateX(ew::Radians(rotation.x)) *
+				RotateZ(ew::Radians(rotation.z)) *
+					Scale(scale);
 		}
 	};
 }

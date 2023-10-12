@@ -63,13 +63,13 @@ int main() {
 	ew::Mesh cubeMesh3(ew::createCube(0.5f));
 	ew::Mesh cubeMesh4(ew::createCube(0.5f));
 
-	/*
+	
 	for (int i = 0; i < NUM_CUBES; i++)
 	{
-		Vec3 vect(.5, .5, .5);
-		cubeTransforms[i].Translate(Vector();
+		cubeTransforms[i].position.x = (i % 2) - .5;
+		cubeTransforms[i].position.y = (i / 2) - .5;
 	}
-	*/
+	
 
 	while (!glfwWindowShouldClose(window)) {
 		glfwPollEvents();
