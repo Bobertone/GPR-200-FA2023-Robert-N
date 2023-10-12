@@ -3,6 +3,8 @@
 #include <fstream>
 //#include <GLFW/glfw3.h>
 #include "../ew/external/glad.h"
+//#include "../ew/ewMath/ewMath.h"
+#include "../ew/ewMath/mat4.h"
 
 namespace bob
 {
@@ -20,6 +22,9 @@ namespace bob
 		void setVec4(const std::string& name, float x, float y, float z, float w) const;
 		unsigned int createShader(GLenum shaderType, const char* sourceCode);
 		unsigned int createShaderProgram(const char* vertexShaderSource, const char* fragmentShaderSource);
+		//shader.cpp
+		void Shader::setMat4(const std::string& name, const ew::Mat4& v) const;
+
 	private:
 		unsigned int m_id; //OpenGL program handle
 	};
