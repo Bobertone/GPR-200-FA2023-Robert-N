@@ -35,6 +35,19 @@ unsigned int loadTexture(const char* filePath, int wrapMode, int filterMode) {
 		format = GL_RGBA;
 	}
 
+	unsigned int texture;
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexImage2D(
+		GL_TEXTURE_2D,    // target
+		0,				  // level
+		format,			  // internalformat (the number of color components in the texture)
+		width, height, 0, // width, height, border  
+		format,			  // format (the basic layout of the pixel data being passed in)
+		GL_UNSIGNED_BYTE, // type 
+		data);			  // data
+	
+
 	switch (wrapMode)
 	{
 	case GL_REPEAT:
@@ -44,6 +57,10 @@ unsigned int loadTexture(const char* filePath, int wrapMode, int filterMode) {
 	case GL_CLAMP_TO_EDGE:
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		break;
+	case GL_CLAMP_TO_BORDER:
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 		break;
 	default:
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -65,18 +82,6 @@ unsigned int loadTexture(const char* filePath, int wrapMode, int filterMode) {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	}
 
-	unsigned int texture;
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
-	glTexImage2D(
-		GL_TEXTURE_2D,    // target
-		0,				  // level
-		format,			  // internalformat (the number of color components in the texture)
-		width, height, 0, // width, height, border  
-		format,			  // format (the basic layout of the pixel data being passed in)
-		GL_UNSIGNED_BYTE, // type 
-		data);			  // data
-	
 	glGenerateMipmap(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	stbi_image_free(data);

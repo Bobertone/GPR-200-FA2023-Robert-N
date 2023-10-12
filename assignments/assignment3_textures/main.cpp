@@ -69,7 +69,7 @@ int main() {
 	//Example usage in main.cpp
 	unsigned int bgTexture = loadTexture("assets/background.png", GL_REPEAT, GL_NEAREST);
 	unsigned int noiseTexture = loadTexture("assets/noise.png", GL_REPEAT, GL_NEAREST);
-	unsigned int flowerTexture = loadTexture("assets/flower.png", GL_CLAMP_TO_EDGE, GL_NEAREST);
+	unsigned int flowerTexture = loadTexture("assets/flower.png", GL_CLAMP_TO_BORDER, GL_NEAREST);
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
