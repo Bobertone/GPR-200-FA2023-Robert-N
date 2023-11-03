@@ -70,4 +70,55 @@ namespace bob {
 					Scale(scale);
 		}
 	};
+
+	//Creates a right handed view space
+	//eye = eye (camera) position
+	//target = position to look at
+	//up = up axis, usually(0,1,0)
+	inline ew::Mat4 LookAt(ew::Vec3 eye, ew::Vec3 target, ew::Vec3 up) {
+			//use ew::Cross for cross product!
+		ew::Vec3 f = ew::Normalize(eye - target);	  //f = forward
+		ew::Vec3 r = ew::Normalize(ew::Cross(up, f)); //r = right
+		ew::Vec3 u = ew::Cross(f, r);				  //u = up
+		return ew::Mat4(
+			r.x, r.y, r.z, -ew::Dot(r,eye),
+			u.x, u.y, u.z, -ew::Dot(u, eye),
+			f.x, f.y, f.z, -ew::Dot(f, eye),
+			  0,   0,   0,   1
+		);
+	};
+	//Orthographic projection
+	inline ew::Mat4 Orthographic(float height, float aspect, float near, float far) {
+		float r = (height * aspect)/2;
+		float t = height / 2;
+		float l = -r;
+		float b = -t;
+
+		return ew::Mat4(
+			2.0f/(r-l), 0,          0,               -(r+l)/(r-l),
+			0,          2.0f/(t-b), 0,               -(t+b)/(t-b),
+			0,          0,         -2.0f/(far-near), -(far+near)/(far-near),
+			0,          0,          0,                1
+		);
+
+	};
+	//Perspective projection
+	//fov = vertical aspect ratio (radians)
+	inline ew::Mat4 Perspective(float fov, float aspect, float near, float far) {
+		/*
+			theta = fov = vertical field of view //radians
+			a = aspect = aspect ratio; //screen width / height
+			n = near = near plane; //+z distance from camera
+			f = far = far plane; //+z distance from camera
+			0 < n < f
+		*/
+		return ew::Mat4(
+			1/(tan(fov/2)*aspect), 0,			 0,						0,
+			0,					   1/tan(fov/2), 0,						0,
+			0,					   0,			 (near+far)/(near-far), (2*far*near)/(near-far),
+			0,					   0,			-1,						0
+		);
+
+	};
+
 }
