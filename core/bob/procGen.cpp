@@ -56,7 +56,7 @@ namespace bob {
 				v.pos.y = radius * cos(phi);
 				v.pos.z = radius * sin(theta) * sin(phi);
 				v.normal = ew::Normalize(ew::Vec3(cos(theta) * sin(phi), cos(phi), sin(theta) * sin(phi)));
-				v.uv = ew::Vec2(((float)col / numSegments), ((float)row / numSegments));
+				v.uv = ew::Vec2(((float)col / numSegments), ((1 - (float)row / numSegments)));
 				meshData.vertices.push_back(v);
 			} 
 		}
