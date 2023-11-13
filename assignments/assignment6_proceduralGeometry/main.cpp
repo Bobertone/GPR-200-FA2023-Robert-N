@@ -14,6 +14,7 @@
 #include <ew/transform.h>
 #include <ew/camera.h>
 #include <ew/cameraController.h>
+#include <bob/procGen.h>
 
 void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 void resetCamera(ew::Camera& camera, ew::CameraController& cameraController);
@@ -85,6 +86,25 @@ int main() {
 	//Initialize transforms
 	ew::Transform cubeTransform;
 
+	//CUSTOM OBJECT INITIALIZATION
+	//Create mesh data 
+	ew::MeshData planeMeshData = bob::createPlane(1, 1, 16);
+	ew::MeshData sphereMeshData = bob::createSphere(1, 16);
+	ew::MeshData cylinderMeshData = bob::createCylinder(2, 1, 16);
+
+	//Create mesh renderer
+	ew::Mesh planeMesh(planeMeshData);
+	ew::Mesh sphereMesh(sphereMeshData);
+	ew::Mesh cylinderMesh(cylinderMeshData);
+
+	//Initialize transform
+	ew::Transform planeTransform;
+	ew::Transform sphereTransform;
+	ew::Transform cylinderTransform;
+	planeTransform.position = ew::Vec3(1.0f, 0.0f, 0.0f);
+	sphereTransform.position = ew::Vec3(4.0f, 0.0f, 0.0f);
+	cylinderTransform.position = ew::Vec3(7.0f, 0.0f, 0.0f);
+
 	resetCamera(camera,cameraController);
 
 	while (!glfwWindowShouldClose(window)) {
@@ -103,7 +123,6 @@ int main() {
 		//Clear both color buffer AND depth buffer
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		
 
 		shader.use();
 		glBindTexture(GL_TEXTURE_2D, brickTexture);
@@ -120,6 +139,18 @@ int main() {
 		//Draw cube
 		shader.setMat4("_Model", cubeTransform.getModelMatrix());
 		cubeMesh.draw((ew::DrawMode)appSettings.drawAsPoints);
+
+		//Draw plane
+		shader.setMat4("_Model", planeTransform.getModelMatrix());
+		planeMesh.draw((ew::DrawMode)appSettings.drawAsPoints);
+
+		//Draw sphere
+		shader.setMat4("_Model", sphereTransform.getModelMatrix());
+		sphereMesh.draw((ew::DrawMode)appSettings.drawAsPoints);
+				
+		//Draw cylinder
+		shader.setMat4("_Model", cylinderTransform.getModelMatrix());
+		cylinderMesh.draw((ew::DrawMode)appSettings.drawAsPoints);
 
 		//Render UI
 		{
