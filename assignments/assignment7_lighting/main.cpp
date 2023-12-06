@@ -233,6 +233,18 @@ int main() {
 			ImGui::SliderFloat("Diffuse", &material.diffuseK, 0.0f, 1.0f);
 			ImGui::SliderFloat("Specular", &material.specularK, 0.0f, 1.0f);
 			ImGui::SliderFloat("Shininess", &material.shininess, 0.0f, 255.0f);
+			
+			if (ImGui::CollapsingHeader("Lights")) {
+				for (size_t i = 0; i < MAX_LIGHTS; i++)
+				{
+					ImGui::PushID(i);
+					if (ImGui::CollapsingHeader(("Light "+std::to_string(i+1)).c_str())) {
+						ImGui::DragFloat3("Position", &lights[i].position.x, 0.05f);
+						ImGui::ColorEdit3("Color", &lights[i].color.x);
+					}
+					ImGui::PopID();
+				}
+			};
 
 			ImGui::End();
 			
